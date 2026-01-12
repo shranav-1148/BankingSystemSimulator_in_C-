@@ -44,6 +44,39 @@ vector<Account> loadAccountsFromFile()
     }
 }
 
+void updateAccountInFile(Account &updated)
+{
+    vector<Account> accounts = loadAccountsFromFile();
+
+    bool found = false;
+    for (Account &acc : accounts)
+    {
+        if (acc.getAccountNumber() == updated.getAccountNumber())
+        {
+            acc = updated;
+            found = true;
+            break;
+        }
+    }
+
+    if (!found)
+    {
+        cout << "Account not found." << endl;
+        return;
+    }
+
+    ofstream outFile("accounts.txt", ios::trunc);
+    for (Account acc : accounts)
+    {
+        outFile << acc.getAccountNumber() << ","
+                << acc.getAccountHolderName() << ","
+                << acc.getBalance() << ","
+                << acc.getisFrozen() << endl;
+    }
+
+    cout << "Account updated successfully." << endl;
+}
+
 int main()
 {
     bool endProgram = false;
@@ -93,8 +126,61 @@ int main()
         }
         else if (choice == 3)
         {
-            // Account management logic can be implemented here
-            cout << "Account management feature is under development." << endl;
+            cout << "Find Account by ID: ";
+            int searchId;
+            cin >> searchId;
+            vector<Account> accounts = loadAccountsFromFile();
+            bool found = false;
+            for (Account &account : accounts)
+            {
+                if (account.getAccountNumber() == searchId)
+                {
+                    found = true;
+                    int manageChoice;
+                    cout << "1. Deposit" << endl;
+                    cout << "2. Withdraw" << endl;
+                    cout << "3. Freeze Account" << endl;
+                    cout << "4. Unfreeze Account" << endl;
+                    cout << "5. Back to Main Menu" << endl;
+                    cout << "Select an option: ";
+                    cin >> manageChoice;
+
+                    if (manageChoice == 1)
+                    {
+                        double depositAmt;
+                        cout << "Enter deposit amount: ";
+                        cin >> depositAmt;
+                        account.depositIntoAccount(depositAmt);
+                        updateAccountInFile(account);
+                    }
+                    else if (manageChoice == 2)
+                    {
+                        double withdrawAmt;
+                        cout << "Enter withdrawal amount: ";
+                        cin >> withdrawAmt;
+                        account.withdrawFromAccount(withdrawAmt);
+                        updateAccountInFile(account);
+                    }
+                    else if (manageChoice == 3)
+                    {
+                        account.freezeAccount();
+                        updateAccountInFile(account);
+                    }
+                    else if (manageChoice == 4)
+                    {
+                        account.unFreezeAccount();
+                        updateAccountInFile(account);
+                    }
+                    else if (manageChoice == 5)
+                    {
+                        break;
+                    }
+                }
+            }
+            if (!found)
+            {
+                cout << "Account with ID " << searchId << " not found." << endl;
+            }
         }
         else if (choice == 4)
         {

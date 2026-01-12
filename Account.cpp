@@ -76,10 +76,35 @@ void Account::saveAccountInfoToFile()
     }
 }
 
+int Account::getAccountNumber()
+{
+    return accountNumber;
+}
+
 void Account::printAccountDetails()
 {
     cout << "Account Number: " << accountNumber << endl;
     cout << "Account Holder Name: " << accountHolderName << endl;
     cout << "Balance: $" << balance << endl;
     cout << "Account Status: " << (isFrozen ? "Frozen" : "Active") << endl;
+}
+
+int Account::getAccountId()
+{
+    return accountNumber;
+}
+
+std::string Account::getAccountHolderName()
+{
+    return accountHolderName;
+}
+
+double Account::getBalance()
+{
+    return balance;
+}
+
+bool Account::getisFrozen()
+{
+    return isFrozen;
 }
