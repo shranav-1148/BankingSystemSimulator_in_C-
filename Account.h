@@ -15,10 +15,12 @@ public:
     Account(int id, std::string name, double bal, bool frozen);
 
     void printBalance();
+    void printAccountDetails();
     void depositIntoAccount(double depositAmt);
     void withdrawFromAccount(double withDrawAmt);
     void freezeAccount();
     void unFreezeAccount();
+    void saveAccountInfoToFile();
 };
 
 #endif

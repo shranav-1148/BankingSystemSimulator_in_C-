@@ -61,3 +61,25 @@ void Account::unFreezeAccount()
     isFrozen = false;
     cout << "Account for " << accountHolderName << " is now unfrozen." << endl;
 }
+
+void Account::saveAccountInfoToFile()
+{
+    ofstream outFile("accounts.txt", ios::app);
+    if (outFile.is_open())
+    {
+        outFile << accountNumber << ","
+                << accountHolderName << ","
+                << balance << ","
+                << isFrozen << endl;
+        outFile.close();
+        cout << "Account information saved for " << accountHolderName << endl;
+    }
+}
+
+void Account::printAccountDetails()
+{
+    cout << "Account Number: " << accountNumber << endl;
+    cout << "Account Holder Name: " << accountHolderName << endl;
+    cout << "Balance: $" << balance << endl;
+    cout << "Account Status: " << (isFrozen ? "Frozen" : "Active") << endl;
+}
