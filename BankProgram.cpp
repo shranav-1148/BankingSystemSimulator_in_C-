@@ -141,7 +141,8 @@ int main()
                     cout << "2. Withdraw" << endl;
                     cout << "3. Freeze Account" << endl;
                     cout << "4. Unfreeze Account" << endl;
-                    cout << "5. Back to Main Menu" << endl;
+                    cout << "5. Print Account Details" << endl;
+                    cout << "6. Back to Main Menu" << endl;
                     cout << "Select an option: ";
                     cin >> manageChoice;
 
@@ -172,6 +173,10 @@ int main()
                         updateAccountInFile(account);
                     }
                     else if (manageChoice == 5)
+                    {
+                        account.printAccountDetails();
+                    }
+                    else if (manageChoice == 6)
                     {
                         break;
                     }
