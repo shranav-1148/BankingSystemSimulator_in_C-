@@ -6,6 +6,7 @@ using namespace std;
 
 Account::Account(int id, string name, double bal, bool frozen)
 {
+    // Constructor to initialize account details
     accountNumber = id;
     accountHolderName = name;
     balance = bal;
@@ -14,6 +15,7 @@ Account::Account(int id, string name, double bal, bool frozen)
 
 void Account::printBalance()
 {
+    // Prints the current balance of the account
     if (isFrozen)
     {
         cout << "Account for " << accountHolderName << " is frozen." << endl;
@@ -24,6 +26,7 @@ void Account::printBalance()
 
 void Account::depositIntoAccount(double depositAmt)
 {
+    // Deposits amount into the account
     if (isFrozen)
     {
         cout << "Account for " << accountHolderName << " is frozen. Deposit denied." << endl;
@@ -35,6 +38,7 @@ void Account::depositIntoAccount(double depositAmt)
 
 void Account::withdrawFromAccount(double withDrawAmt)
 {
+    // Withdraws amount from the account
     if (withDrawAmt > balance)
     {
         cout << "Warning! " << accountHolderName << " doesn't have enough money!" << endl;
@@ -52,18 +56,21 @@ void Account::withdrawFromAccount(double withDrawAmt)
 
 void Account::freezeAccount()
 {
+    // Freezes the account
     isFrozen = true;
     cout << "Account for " << accountHolderName << " is now frozen." << endl;
 }
 
 void Account::unFreezeAccount()
 {
+    // Unfreezes the account
     isFrozen = false;
     cout << "Account for " << accountHolderName << " is now unfrozen." << endl;
 }
 
 void Account::saveAccountInfoToFile()
 {
+    // Saves account information to a file
     ofstream outFile("accounts.txt", ios::app);
     if (outFile.is_open())
     {
@@ -76,17 +83,19 @@ void Account::saveAccountInfoToFile()
     }
 }
 
-int Account::getAccountNumber()
-{
-    return accountNumber;
-}
-
 void Account::printAccountDetails()
 {
+    // Prints all account details
     cout << "Account Number: " << accountNumber << endl;
     cout << "Account Holder Name: " << accountHolderName << endl;
     cout << "Balance: $" << balance << endl;
     cout << "Account Status: " << (isFrozen ? "Frozen" : "Active") << endl;
+}
+
+/* Getters */
+int Account::getAccountNumber()
+{
+    return accountNumber;
 }
 
 int Account::getAccountId()
