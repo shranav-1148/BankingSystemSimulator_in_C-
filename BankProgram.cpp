@@ -215,6 +215,36 @@ int main()
                     else if (manageChoice == 3)
                     {
                         // Transfer Money
+                        int toAccountId;
+                        double transferAmt;
+
+                        cout << "Enter recipient Account ID: ";
+                        cin >> toAccountId;
+                        cout << "Enter transfer amount: ";
+                        cin >> transferAmt;
+                        bool recipientFound = false;
+                        for (Account &toAccount : accounts)
+                        {
+                            if (toAccount.getAccountNumber() == toAccountId)
+                            {
+                                recipientFound = true;
+                                account.withdrawFromAccount(transferAmt);
+                                toAccount.depositIntoAccount(transferAmt);
+                                updateAccountInFile(account);
+                                updateAccountInFile(toAccount);
+                                Transaction transaction(account.getAccountNumber(), toAccountId, transferAmt, to_string(time(0)), "Transfer");
+                                transaction.saveTransactionToFile("transactions.txt");
+                                break;
+                            }
+                        }
+                        if (!recipientFound)
+                        {
+                            cout << "Recipient account not found." << endl;
+                        }
+                        else
+                        {
+                            cout << "Transfer successful." << endl;
+                        }
                     }
                     else if (manageChoice == 4)
                     {
