@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Transaction.h"
+#include <fstream>
 using namespace std;
 
 Transaction::Transaction(int fromId, int toId, double amount, string timestamp, string type)
@@ -43,4 +44,14 @@ string Transaction::getTimestamp()
 string Transaction::getType()
 {
     return type;
+}
+
+void Transaction::saveTransactionToFile(string filename)
+{
+    ofstream outFile(filename, ios::app);
+    if (outFile.is_open())
+    {
+        outFile << fromId << "," << toId << "," << amount << "," << timestamp << "," << type << endl;
+        outFile.close();
+    }
 }

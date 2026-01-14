@@ -2,8 +2,10 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <ctime>
 #include <sstream>
 #include "Account.h"
+#include "Transaction.h"
 using namespace std;
 
 vector<Account> loadAccountsFromFile()
@@ -44,8 +46,46 @@ vector<Account> loadAccountsFromFile()
     }
 }
 
+void loadTransactionFromFile(vector<Transaction> &transactions)
+{
+    ifstream inFile("transactions.txt");
+
+    if (!inFile)
+    {
+        cout << "No existing transactions found." << endl;
+        return;
+    }
+    else
+    {
+        int fromId, toId;
+        double amount;
+        string timestamp, type;
+        string line;
+        while (getline(inFile, line))
+        {
+            stringstream ss(line);
+            string fromIdStr, toIdStr, amountStr, timestamp, type;
+
+            getline(ss, fromIdStr, ',');
+            getline(ss, toIdStr, ',');
+            getline(ss, amountStr, ',');
+            getline(ss, timestamp, ',');
+            getline(ss, type, ',');
+
+            int fromId = stoi(fromIdStr);
+            int toId = stoi(toIdStr);
+            double amount = stod(amountStr);
+
+            transactions.emplace_back(fromId, toId, amount, timestamp, type);
+        }
+        inFile.close();
+        cout << "Loaded " << transactions.size() << " transactions from file." << endl;
+    }
+}
+
 void updateAccountInFile(Account &updated)
 {
+    // Based on any updates to account updates the accounts file
     vector<Account> accounts = loadAccountsFromFile();
 
     bool found = false;
@@ -88,7 +128,8 @@ int main()
         cout << "1. Create Account" << endl;
         cout << "2. View Accounts" << endl;
         cout << "3. Manage Account" << endl;
-        cout << "4. Exit" << endl;
+        cout << "4. View Transactions" << endl;
+        cout << "5. Exit" << endl;
         cout << "Please select an option: ";
 
         int choice;
@@ -139,45 +180,62 @@ int main()
                     int manageChoice;
                     cout << "1. Deposit" << endl;
                     cout << "2. Withdraw" << endl;
-                    cout << "3. Freeze Account" << endl;
-                    cout << "4. Unfreeze Account" << endl;
-                    cout << "5. Print Account Details" << endl;
-                    cout << "6. Back to Main Menu" << endl;
+                    cout << "3. Transfer Money" << endl;
+                    cout << "4. Freeze Account" << endl;
+                    cout << "5. Unfreeze Account" << endl;
+                    cout << "6. Print Account Details" << endl;
+                    cout << "7. Back to Main Menu" << endl;
                     cout << "Select an option: ";
                     cin >> manageChoice;
 
                     if (manageChoice == 1)
                     {
+                        // Deposit
                         double depositAmt;
                         cout << "Enter deposit amount: ";
                         cin >> depositAmt;
                         account.depositIntoAccount(depositAmt);
                         updateAccountInFile(account);
+                        Transaction transaction(0, account.getAccountNumber(), depositAmt, to_string(time(0)), "Deposit");
+                        transaction.saveTransactionToFile("transactions.txt");
                     }
                     else if (manageChoice == 2)
                     {
+                        // Withdraw
                         double withdrawAmt;
                         cout << "Enter withdrawal amount: ";
                         cin >> withdrawAmt;
                         account.withdrawFromAccount(withdrawAmt);
                         updateAccountInFile(account);
+
+                        Transaction transaction(account.getAccountNumber(), 0, withdrawAmt, to_string(time(0)), "Withdraw");
+                        transaction.saveTransactionToFile("transactions.txt");
                     }
+
                     else if (manageChoice == 3)
                     {
-                        account.freezeAccount();
-                        updateAccountInFile(account);
+                        // Transfer Money
                     }
                     else if (manageChoice == 4)
                     {
-                        account.unFreezeAccount();
+                        // Freeze Account
+                        account.freezeAccount();
                         updateAccountInFile(account);
                     }
                     else if (manageChoice == 5)
                     {
-                        account.printAccountDetails();
+                        // Unfreeze Account
+                        account.unFreezeAccount();
+                        updateAccountInFile(account);
                     }
                     else if (manageChoice == 6)
                     {
+                        // Print Account Details
+                        account.printAccountDetails();
+                    }
+                    else if (manageChoice == 7)
+                    {
+                        // Back to Main Menu
                         break;
                     }
                 }
@@ -188,6 +246,18 @@ int main()
             }
         }
         else if (choice == 4)
+        {
+            vector<Transaction> transactions;
+            loadTransactionFromFile(transactions);
+            for (Transaction &trans : transactions)
+            {
+                cout << "------------------------" << endl;
+                trans.printTransactionDetails();
+                cout << "------------------------" << endl;
+            }
+        }
+
+        else if (choice == 5)
         {
             cout << "Exiting the program. Goodbye!" << endl;
             break;

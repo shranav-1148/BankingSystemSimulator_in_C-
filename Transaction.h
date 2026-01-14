@@ -22,6 +22,7 @@ public:
     double getAmount();
     string getTimestamp();
     string getType();
+    void saveTransactionToFile(string filename);
 };
 
 #endif

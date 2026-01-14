@@ -1,2 +1,2 @@
-1,Shranav,1000,0
+1,Shranav,1500,0
 2,John,500,1
